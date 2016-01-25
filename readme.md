@@ -21,4 +21,24 @@
 
 # Week 1
 
-##Lecture
+##Lectures
+- Check out the first set of slides
+- Revision on trigonometry, vectors and quaternions 
+
+## Lab
+
+You will recognise this question as being a variation on Question 1 from your Christmas exam. Instead of using the spaceship model from the exam, start with a blank unity project. 
+
+- Create a new scene
+- Add a Sphere and set its initial position to be (0, 0, 5)
+- Add a point light and set its position to be (0, 0, 0) and its distance to be 20
+- Change the camera position so that its initial position is (0, 20, 0) and rotate it so that it looks down on the scene. To do this, set its Rotation to be (90, 0, 0)
+- Now attach a script to the sphere and call it CircleFollowing. Open this in Visual Studio
+- What you need to do in this script is 
+	- Add fields for radius and the waypointCount
+	- Add a field to hold a list of wayponts
+	- Set appropriate default values for these  
+	- In the Start method, use trigonometry to calculate the waypoints
+	- Calculate waypoints positioned around the outside of a circle centred at (000) and with a radius of 10. The points should be on the X-Z plane. The sphere's start position should be the zeroth waypoint. 
+	- Int Update, the sphere should seek the next waypoint. When its’ distance is < 1, it should advance to the subsequent waypoint. When it reaches the last waypoint, it should seek the zeroth waypoint again and so on… 
+- Draw appropriate gizmos
