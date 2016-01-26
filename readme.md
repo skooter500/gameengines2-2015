@@ -39,8 +39,10 @@ You will recognise this question as being a variation on Question 1 from your Ch
 	- Add a field to hold a list of wayponts
 	- Set appropriate default values for these  
 	- In the Start method, use trigonometry to calculate the waypoints
-	- Calculate waypoints positioned around the outside of a circle centred at (000) and with a radius of 10. The points should be on the X-Z plane. The cube's start position should be the zeroth waypoint. 
-	- Int Update, the sphere should seek the next waypoint. When its’ distance is < 1, it should advance to the subsequent waypoint. When it reaches the last waypoint, it should seek the zeroth waypoint again and so on… 
+	- Calculate waypoints positioned around the outside of a circle centred at (000) and with a radius of the radius field. The points should be on the X-Z plane. The cube's start position should be the zeroth waypoint. 
+	- Int update, the cube should seek the next waypoint. When its’ distance is < 1, it should advance to the subsequent waypoint. When it reaches the last waypoint, it should seek the zeroth waypoint again and so on… 
 - Draw appropriate gizmos
+
+Can you generate the waypoints using quaternions?
 
 Advanced! Read this tutorial on [using Co-routines in Unity](http://docs.unity3d.com/Manual/Coroutines.html). See if you can use a coroutine and a line renderer to have the the cube fire a lazer every 2 seconds 
