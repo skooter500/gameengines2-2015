@@ -46,3 +46,5 @@ You will recognise this question as being a variation on Question 1 from your Ch
 Can you generate the waypoints using quaternions?
 
 Advanced! Read this tutorial on [using Co-routines in Unity](http://docs.unity3d.com/Manual/Coroutines.html). See if you can use a coroutine and a line renderer to have the the cube fire a lazer every 2 seconds 
+
+- [Solution to the lab](unity/SimplePathFollowing)
