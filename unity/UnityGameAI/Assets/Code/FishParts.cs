@@ -148,7 +148,7 @@ public class FishParts : MonoBehaviour
         tail.transform.RotateAround(transform.TransformPoint(tailRotPoint), transform.up, tailRot - oldTailRot);
         oldTailRot = tailRot;
 
-        float speed = boid.acceleration.magnitude;
+        float speed = boid.velocity.magnitude;
         theta += speed * angularVelocity * Time.deltaTime * speedMultiplier;
         if (theta >= Mathf.PI * 2.0f)
         {
