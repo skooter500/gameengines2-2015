@@ -37,7 +37,7 @@ public class FishParts : MonoBehaviour
     public GameObject boidGameObject;
 
     [HideInInspector]
-    //public Boid boid;
+    public Boid boid;
 
     public FishParts()
     {
@@ -102,7 +102,7 @@ public class FishParts : MonoBehaviour
             tail.GetComponent<Collider>().enabled = false;
         }
 
-        //boid = (boidGameObject == null) ? GetComponent<Boid>() : boidGameObject.GetComponent<Boid>();
+        boid = (boidGameObject == null) ? GetComponent<Boid>() : boidGameObject.GetComponent<Boid>();
 
     }
 
@@ -148,7 +148,7 @@ public class FishParts : MonoBehaviour
         tail.transform.RotateAround(transform.TransformPoint(tailRotPoint), transform.up, tailRot - oldTailRot);
         oldTailRot = tailRot;
 
-        float speed = 1.0F; // boid.acceleration.magnitude;
+        float speed = boid.acceleration.magnitude;
         theta += speed * angularVelocity * Time.deltaTime * speedMultiplier;
         if (theta >= Mathf.PI * 2.0f)
         {
