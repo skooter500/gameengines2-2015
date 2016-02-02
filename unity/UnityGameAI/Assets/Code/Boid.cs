@@ -20,8 +20,11 @@ public class Boid : MonoBehaviour {
 
     void OnDrawGizmos()
     {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawRay(transform.position, seekTargetPosition);
+        if (seekEnabled)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawRay(transform.position, seekTargetPosition);
+        }
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, transform.position + force);
     }
@@ -60,9 +63,7 @@ public class Boid : MonoBehaviour {
         if (velocity.magnitude > float.Epsilon)
         {
             transform.forward = velocity;
-        }
-
-
+        }        
     }
         
 }
