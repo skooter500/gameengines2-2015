@@ -31,12 +31,12 @@ Create this virtual fish tank:
 
 You can start with yesterdays code. I only used ```Seek``` to make the fish move and I didn't modify the Boid class! You can use Colliders, tagging, rigid bodies, spawners, prefabs and co-routines and any other Unity magic you know. What's happening:
 
-- Fish should spawn at random positions inside the cube
-- They should be coloured with a random shade of green 
-- They should swim back and forth
-- Every two seconds, food should drop into the tank
-- If a fish comes in range of food, it should chase it until the food goes out of range, or it eats it
-- When the food goes out of range or gets eaten, the fish should return to swimming back and forth
+- Fish should spawn at random positions inside the cube.
+- They should be coloured with a random shade of green. 
+- They should swim back and forth. There should be some variation in the speed the fish swim at.
+- Every two seconds, food should drop into the tank.
+- If a fish comes in range of food, it should chase it until the food goes out of range, or it eats it.
+- When the food goes out of range or gets eaten, the fish should return to swimming back and forth.
 
 # Week 1
 
