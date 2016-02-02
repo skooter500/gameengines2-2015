@@ -19,6 +19,25 @@
 # Assignment
 - [Assignment](assignment.md)
 
+# Week 2
+## Lectures
+- Seek and arrive steering behaviours
+
+## Lab
+
+Create this virtual fish tank:
+
+[![YouTube](http://img.youtube.com/vi/Yjm4cLNLNq0/0.jpg)](https://www.youtube.com/watch?v=Yjm4cLNLNq0)
+
+You can start with yesterdays code. I only used ```Seek``` to make the fish move and I didn't modify the Boid class! You can use Colliders, tagging, rigid bodies, spawners, prefabs and co-routines and any other Unity magic you know. What's happening:
+
+- Fish should spawn at random positions inside the cube
+- They should be coloured with a random shade of green 
+- They should swim back and forth
+- Every two seconds, food should drop into the tank
+- If a fish comes in range of food, it should chase it until the food goes out of range, or it eats it
+- When the food goes out of range or gets eaten, the fish should return to swimming back and forth
+
 # Week 1
 
 ##Lectures
