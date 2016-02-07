@@ -38,6 +38,8 @@ You can start with yesterdays code. I only used ```Seek``` to make the fish move
 - If a fish comes in range of food, it should chase it until the food goes out of range, or it eats it.
 - When the food goes out of range or gets eaten, the fish should return to swimming back and forth.
 
+- Solution to the lab is in Scene2
+
 # Week 1
 
 ##Lectures
