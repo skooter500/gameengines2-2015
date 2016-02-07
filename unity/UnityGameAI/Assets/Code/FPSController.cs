@@ -5,16 +5,10 @@ using System.Text;
 
 public class FPSController : MonoBehaviour
 {
-    Camera ovrCamera;
     float speed = 200.0f;
     // Use this for initialization
     void Start()
     {
-
-        if (GameObject.FindGameObjectWithTag("ovrplayer") != null)
-        {
-            //ovrCamera = GameObject.FindGameObjectWithTag("ovrplayer").GetComponentInChildren<Camera>();
-        }
     }
 
     void Yaw(float angle)
@@ -46,14 +40,7 @@ public class FPSController : MonoBehaviour
 
     void Walk(float units)
     {
-        if (ovrCamera != null)
-        {
-            transform.position += ovrCamera.transform.forward * units;
-        }
-        else
-        {
-            transform.position += transform.forward * units;
-        }
+        transform.position += transform.forward * units;
     }
 
     void Fly(float units)
@@ -63,14 +50,7 @@ public class FPSController : MonoBehaviour
 
     void Strafe(float units)
     {
-        if (ovrCamera != null)
-        {
-            transform.position += ovrCamera.transform.right * units;
-        }
-        else
-        {
-            transform.position += transform.right * units;
-        }
+        transform.position += transform.right * units;
     }
 
     // Update is called once per frame
@@ -79,9 +59,7 @@ public class FPSController : MonoBehaviour
         float mouseX, mouseY;
         float speed = this.speed;
 
-        float runAxis = Input.GetAxis("Run Axis");
-
-        if (Input.GetKey(KeyCode.LeftShift) || runAxis != 0)
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             speed *= 5.0f;
         }
@@ -120,30 +98,8 @@ public class FPSController : MonoBehaviour
 
 
         Yaw(mouseX);
-        float contYaw = Input.GetAxis("Yaw Axis");
-        float contPitch = Input.GetAxis("Pitch Axis");
-        Yaw(contYaw);
-
+        
         // If in Rift mode, dont pitch
-        if (ovrCamera == null)
-        {
-            Pitch(-mouseY);
-            Pitch(contPitch);
-        }
-        else
-        {
-            Fly(-contPitch * speed * Time.deltaTime);
-        }
-
-        float contWalk = Input.GetAxis("Walk Axis");
-        float contStrafe = Input.GetAxis("Strafe Axis");
-        if (Mathf.Abs(contWalk) > 0.1f)
-        {
-            Walk(-contWalk * speed * Time.deltaTime);
-        }
-        if (Mathf.Abs(contStrafe) > 0.1f)
-        {
-            Strafe(contStrafe * speed * Time.deltaTime);
-        }
+        Pitch(-mouseY);        
     }
 }

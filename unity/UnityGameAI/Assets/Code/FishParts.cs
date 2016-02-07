@@ -39,6 +39,8 @@ public class FishParts : MonoBehaviour
     [HideInInspector]
     public Boid boid;
 
+    public Color color;
+
     public FishParts()
     {
         segments = new List<GameObject>();
@@ -130,6 +132,16 @@ public class FishParts : MonoBehaviour
         tailRotPoint = tail.transform.localPosition;
         tailRotPoint.z += tailSize.z / 2;
 
+        Color myColor = color;
+        myColor.r *= Random.Range(0.0f, 1.0f);
+        myColor.g *= Random.Range(0.0f, 1.0f);
+        myColor.b *= Random.Range(0.0f, 1.0f);
+
+        for (int j = 0; j < transform.childCount; j++)
+        {            
+            transform.GetChild(j).GetComponent<Renderer>().material.color = myColor;
+        }
+        
     }
 
     float oldHeadRot = 0;
