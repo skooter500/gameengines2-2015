@@ -18,6 +18,24 @@ public class Boid : MonoBehaviour {
 	
 	}
 
+    public Vector3 Arrive(Vector3 targetPos)
+    {
+        Vector3 toTarget = targetPos - transform.position;
+
+        float slowingDistance = 15.0f;
+        float distance = toTarget.magnitude;
+        if (distance < 0.5f)
+        {
+            velocity = Vector3.zero;
+        } 
+        float ramped = maxSpeed * (distance / slowingDistance);
+
+        float clamped = Mathf.Min(ramped, maxSpeed);
+        Vector3 desired = clamped * (toTarget / distance);
+
+        return desired - velocity;
+    }
+
     void OnDrawGizmos()
     {
         if (seekEnabled)
@@ -51,7 +69,7 @@ public class Boid : MonoBehaviour {
 
         if (seekEnabled)
         {
-            force = Seek(seekTargetPosition);
+            force = Arrive(seekTargetPosition);
         }
 
         force = Vector3.ClampMagnitude(force, maxForce);

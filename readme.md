@@ -19,6 +19,10 @@
 # Assignment
 - [Assignment](assignment.md)
 
+# Week 3
+- Crash course in all the steering behaviours
+- Arrive, flee, pursue and evade
+
 # Week 2
 ## Lectures
 - Seek and arrive steering behaviours
