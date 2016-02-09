@@ -19,6 +19,22 @@
 # Assignment
 - [Assignment](assignment.md)
 
+# Week 3
+- Crash course in all the steering behaviours
+- Arrive, flee, pursue and evade
+
+# Lab
+- Clone the repo and study the solution to last week and make sure you know how it works!
+- Create a new fish spawner that spawns red fish.
+- The red fish should start at a random position in the tank and *arrive* at a random position in the fish tank.
+- When a red fish arrives at its arrive target, it should pick a new target to arrive at.
+- The green fish should *flee* from the red fish if they come in range.
+
+Here is a video of my attempt to implement this behaviour. As usual, try and use tags, coliders and any other Unity magic you can:
+
+[![YouTube](http://img.youtube.com/vi/bXZBaVNcWPA/0.jpg)](https://www.youtube.com/watch?v=bXZBaVNcWPA)
+
+
 # Week 2
 ## Lectures
 - Seek and arrive steering behaviours
