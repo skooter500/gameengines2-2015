@@ -12,12 +12,33 @@ public class Boid : MonoBehaviour {
 
     public bool seekEnabled;
     public Vector3 seekTargetPosition;
-    
+
+    public bool arriveEnabled;
+    public Vector3 arriveTargetPosition;
+    public float slowingDistance = 15;
+
+    public bool fleeEnabled;
+    public float fleeRange = 15.0f;
+    public Vector3 fleeTargetPosition;
+
     // Use this for initialization
     void Start () {
 	
 	}
 
+    public Vector3 Flee(Vector3 targetPos, float range)
+    {
+        Vector3 desiredVelocity;
+        desiredVelocity = transform.position - targetPos;
+        if (desiredVelocity.magnitude > range)
+        {
+            return Vector3.zero;
+        }
+        desiredVelocity.Normalize();
+        desiredVelocity *= maxSpeed;
+        Debug.Log("Flee");
+        return desiredVelocity - velocity;
+    }
     public Vector3 Arrive(Vector3 targetPos)
     {
         Vector3 toTarget = targetPos - transform.position;
@@ -43,6 +64,11 @@ public class Boid : MonoBehaviour {
             Gizmos.color = Color.cyan;
             Gizmos.DrawRay(transform.position, seekTargetPosition);
         }
+        if (arriveEnabled)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawRay(transform.position, arriveTargetPosition);
+        }
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, transform.position + force);
     }
@@ -55,13 +81,6 @@ public class Boid : MonoBehaviour {
         return desired - velocity;
     }
 
-    /*
-    Vector3 Arrive(Vector3 target)
-    {
-
-    }
-    */
-
     // Update is called once per frame
     void Update()
     {
@@ -69,7 +88,15 @@ public class Boid : MonoBehaviour {
 
         if (seekEnabled)
         {
-            force = Arrive(seekTargetPosition);
+            force += Seek(seekTargetPosition);
+        }
+        if (arriveEnabled)
+        {
+            force += Arrive(arriveTargetPosition);
+        }
+        if (fleeEnabled)
+        {
+            force += Flee(fleeTargetPosition, fleeRange);
         }
 
         force = Vector3.ClampMagnitude(force, maxForce);
