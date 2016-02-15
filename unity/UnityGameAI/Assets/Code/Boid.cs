@@ -5,7 +5,7 @@ public class Boid : MonoBehaviour {
     public Vector3 velocity;
     public Vector3 acceleration;
     public Vector3 force;
-    public float mass;
+    public float mass = 1.0f;
 
     public float maxSpeed = 5.0f;
     public float maxForce = 5.0f;
@@ -21,6 +21,20 @@ public class Boid : MonoBehaviour {
     public float fleeRange = 15.0f;
     public Vector3 fleeTargetPosition;
 
+    public bool pursueEnabled;
+    public GameObject pursueTarget;
+    Vector3 pursueTargetPos;
+
+    public Vector3 Pursue(GameObject target)
+    {
+        Vector3 toTarget = target.transform.position - transform.position;
+        float lookAhead = toTarget.magnitude  / maxSpeed;
+        pursueTargetPos = target.transform.position
+           + (target.GetComponent<Boid>().velocity * lookAhead);
+        
+        return Seek(pursueTargetPos);
+    }
+    
     // Use this for initialization
     void Start () {
 	
@@ -62,15 +76,20 @@ public class Boid : MonoBehaviour {
         if (seekEnabled)
         {
             Gizmos.color = Color.cyan;
-            Gizmos.DrawRay(transform.position, seekTargetPosition);
+            Gizmos.DrawLine(transform.position, seekTargetPosition);
         }
         if (arriveEnabled)
         {
             Gizmos.color = Color.cyan;
-            Gizmos.DrawRay(transform.position, arriveTargetPosition);
+            Gizmos.DrawLine(transform.position, arriveTargetPosition);
+        }
+        if (pursueEnabled)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(transform.position, pursueTargetPos);
         }
         Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position, transform.position + force);
+        Gizmos.DrawLine(transform.position, transform.position + force);
     }
 
     Vector3 Seek(Vector3 target)
@@ -97,6 +116,10 @@ public class Boid : MonoBehaviour {
         if (fleeEnabled)
         {
             force += Flee(fleeTargetPosition, fleeRange);
+        }
+        if (pursueEnabled)
+        {
+            force += Pursue(pursueTarget);
         }
 
         force = Vector3.ClampMagnitude(force, maxForce);

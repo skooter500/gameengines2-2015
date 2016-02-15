@@ -22,6 +22,7 @@ public class FishBrain : MonoBehaviour {
         if ((other.gameObject.tag == "food") && (enemy == null))
         {
             food = other.gameObject;
+            GetComponent<Boid>().seekEnabled = true;
             GetComponent<Boid>().seekTargetPosition = food.transform.position;
         }
         if (other.gameObject.tag == "enemy")
