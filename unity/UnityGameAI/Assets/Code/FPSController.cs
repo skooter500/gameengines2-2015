@@ -5,6 +5,7 @@ using System.Text;
 
 public class FPSController : MonoBehaviour
 {
+    
     float speed = 200.0f;
     // Use this for initialization
     void Start()
@@ -100,6 +101,7 @@ public class FPSController : MonoBehaviour
         Yaw(mouseX);
         
         // If in Rift mode, dont pitch
-        Pitch(-mouseY);        
+        Pitch(-mouseY);
+
     }
 }
