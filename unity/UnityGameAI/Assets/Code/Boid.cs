@@ -125,10 +125,6 @@ public class Boid : MonoBehaviour {
         {
             force += Pursue(pursueTarget);
         }
-        if (offsetPursueEnabled)
-        {
-            force += OffsetPursue(offsetPursueTarget, offset);
-        }
 
         force = Vector3.ClampMagnitude(force, maxForce);
         acceleration = force / mass;
