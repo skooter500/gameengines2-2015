@@ -25,10 +25,7 @@ public class Boid : MonoBehaviour {
     public GameObject pursueTarget;
     Vector3 pursueTargetPos;
 
-    public bool offsetPursueEnabled;
-    public GameObject offsetPursueTarget;
-    Vector3 offset;
-    Vector3 offsetPursueTargetPos;
+
 
 
     public Vector3 Pursue(GameObject target)
@@ -41,28 +38,10 @@ public class Boid : MonoBehaviour {
         return Seek(pursueTargetPos);
     }
 
-    public Vector3 OffsetPursue(GameObject offsetPursueTarget, Vector3 offset)
-    {
-        Vector3 target = offsetPursueTarget.transform.TransformPoint(offset);
-        
-        Vector3 toTarget = target - transform.position;
-        float lookAhead = toTarget.magnitude / maxSpeed;
-
-        target += (offsetPursueTarget.GetComponent<Boid>().velocity * lookAhead);
-
-        offsetPursueTargetPos = target;
-
-        return Seek(target);
-    }
 
     // Use this for initialization
     void Start ()
     {
-	    if (offsetPursueEnabled)
-        {
-           offset = transform.position - offsetPursueTarget.transform.position;
-           offset = offsetPursueTarget.transform.rotation * offset;
-        }
     }
 
     public Vector3 Flee(Vector3 targetPos, float range)
@@ -113,13 +92,6 @@ public class Boid : MonoBehaviour {
             Gizmos.color = Color.magenta;
             Gizmos.DrawLine(transform.position, pursueTargetPos);
         }
-
-        if (offsetPursueEnabled)
-        {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawLine(transform.position, offsetPursueTargetPos);
-        }
-
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + force);
     }
