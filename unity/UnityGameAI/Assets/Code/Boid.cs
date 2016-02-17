@@ -24,9 +24,11 @@ public class Boid : MonoBehaviour {
     public bool pursueEnabled;
     public GameObject pursueTarget;
     Vector3 pursueTargetPos;
-
-
-
+    
+    public bool offsetPursueEnabled;
+    public GameObject offsetPursueLeader;
+    Vector3 offset;
+    Vector3 offsetPursueTargetPos;
 
     public Vector3 Pursue(GameObject target)
     {
@@ -42,6 +44,23 @@ public class Boid : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        if (offsetPursueEnabled)
+        {
+            offset = transform.position - offsetPursueLeader.transform.position;
+            offset = Quaternion.Inverse(
+                   offsetPursueLeader.transform.rotation) * offset;
+        }
+    }
+
+    public Vector3 OffsetPursue(GameObject leader, Vector3 offset)
+    {
+        Vector3 target = leader.transform.TransformPoint(offset);
+        Vector3 toTarget = transform.position - target;
+        float dist = toTarget.magnitude;
+        float lookAhead = dist / maxSpeed;
+
+        offsetPursueTargetPos = leader.transform.position + (lookAhead * leader.GetComponent<Boid>().velocity);
+        return Arrive(offsetPursueTargetPos);
     }
 
     public Vector3 Flee(Vector3 targetPos, float range)
@@ -92,6 +111,11 @@ public class Boid : MonoBehaviour {
             Gizmos.color = Color.magenta;
             Gizmos.DrawLine(transform.position, pursueTargetPos);
         }
+        if (offsetPursueEnabled)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(transform.position, offsetPursueTargetPos);
+        }
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + force);
     }
@@ -124,6 +148,11 @@ public class Boid : MonoBehaviour {
         if (pursueEnabled)
         {
             force += Pursue(pursueTarget);
+        }
+
+        if (offsetPursueEnabled)
+        {
+            force += OffsetPursue(offsetPursueLeader, offset);
         }
 
         force = Vector3.ClampMagnitude(force, maxForce);
