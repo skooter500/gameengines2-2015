@@ -52,7 +52,7 @@ public class Boid : MonoBehaviour {
 
         offsetPursueTargetPos = target;
 
-        return Seek(target);
+        return Arrive(target);
     }
 
     // Use this for initialization
