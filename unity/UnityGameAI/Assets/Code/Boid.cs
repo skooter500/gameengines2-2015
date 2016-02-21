@@ -59,7 +59,7 @@ public class Boid : MonoBehaviour {
         float dist = toTarget.magnitude;
         float lookAhead = dist / maxSpeed;
 
-        offsetPursueTargetPos = leader.transform.position + (lookAhead * leader.GetComponent<Boid>().velocity);
+        offsetPursueTargetPos = target + (lookAhead * leader.GetComponent<Boid>().velocity);
         return Arrive(offsetPursueTargetPos);
     }
 
@@ -85,6 +85,7 @@ public class Boid : MonoBehaviour {
         if (distance < 0.5f)
         {
             velocity = Vector3.zero;
+            return Vector3.zero;
         } 
         float ramped = maxSpeed * (distance / slowingDistance);
 
