@@ -40,7 +40,6 @@ public class Boid : MonoBehaviour {
         return Seek(pursueTargetPos);
     }
 
-
     // Use this for initialization
     void Start ()
     {
