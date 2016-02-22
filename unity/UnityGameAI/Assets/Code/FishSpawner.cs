@@ -29,7 +29,7 @@ public class FishSpawner : MonoBehaviour {
             fish.GetComponent<Boid>().seekTargetPosition = waypoints[whichToStart];
             fish.GetComponent<FishBrain>().current = whichToStart;
 
-            fish.GetComponent<FishParts>().color = color;
+            fish.GetComponent<FishParts>().spawnColor = color;
             fish.GetComponent<Boid>().seekEnabled = true;
             fish.GetComponent<Boid>().maxSpeed = Random.Range(4.0f, 6.0f);
         }

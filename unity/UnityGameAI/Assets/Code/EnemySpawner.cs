@@ -17,7 +17,7 @@ public class EnemySpawner : MonoBehaviour {
             Vector3 pos = Random.insideUnitSphere * range;
             fish.GetComponent<Boid>().arriveTargetPosition = pos;
 
-            fish.GetComponent<FishParts>().color = color;
+            fish.GetComponent<FishParts>().spawnColor = color;
             fish.GetComponent<Boid>().arriveEnabled = true;
             fish.GetComponent<Boid>().maxSpeed = Random.Range(4.0f, 6.0f);
         }

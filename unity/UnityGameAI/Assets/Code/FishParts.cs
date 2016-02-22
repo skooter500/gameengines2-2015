@@ -39,7 +39,36 @@ public class FishParts : MonoBehaviour
     [HideInInspector]
     public Boid boid;
 
-    public Color color;
+    public Color spawnColor;
+
+    public void RagDoll()
+    {
+        // Attach Rigidbodies to each of the parts and connect them with joints
+        for (int j = 0; j < transform.childCount; j++)
+        {
+            // Physically simulate the boid
+            GameObject child = transform.GetChild(j).gameObject;
+            child.AddComponent<Rigidbody>();
+            child.AddComponent<BoxCollider>();
+        }
+        // Add two hinge joints
+        HingeJoint hj1 = body.AddComponent<HingeJoint>();
+        hj1.connectedBody = head.GetComponent<Rigidbody>();
+        hj1.axis = Vector3.up;
+        hj1.anchor = new Vector3(0, 0, 0.6f);
+        hj1.autoConfigureConnectedAnchor = false;
+
+        HingeJoint hj2 = tail.AddComponent<HingeJoint>();
+        hj2.connectedBody = body.GetComponent<Rigidbody>();
+        hj2.axis = Vector3.up;
+        hj2.anchor = new Vector3(0, 0, 0.6f);
+        hj2.autoConfigureConnectedAnchor = true;
+        
+        GetComponent<Boid>().enabled = false;
+        GetComponent<FishParts>().enabled = false;
+        GetComponent<SphereCollider>().enabled = false;
+
+    }
 
     public FishParts()
     {
@@ -108,6 +137,9 @@ public class FishParts : MonoBehaviour
 
     }
 
+    float headOffset;
+    float tailOffset;
+    
     private void LayoutSegments()
     {
         bodySize = body.GetComponent<Renderer>().bounds.size;
@@ -116,10 +148,10 @@ public class FishParts : MonoBehaviour
 
         body.transform.position = transform.position;
 
-        float headOffset = (bodySize.z / 2.0f) + gap + (headSize.z / 2.0f);
+        headOffset = (bodySize.z / 2.0f) + gap + (headSize.z / 2.0f);
         head.transform.position = transform.position + new Vector3(0, 0, headOffset);
 
-        float tailOffset = (bodySize.z / 2.0f) + gap + (tailSize.z / 2.0f);
+        tailOffset = (bodySize.z / 2.0f) + gap + (tailSize.z / 2.0f);
         tail.transform.position = transform.position + new Vector3(0, 0, -tailOffset);
 
         head.transform.parent = transform;
@@ -131,15 +163,10 @@ public class FishParts : MonoBehaviour
 
         tailRotPoint = tail.transform.localPosition;
         tailRotPoint.z += tailSize.z / 2;
-
-        Color myColor = color;
-        myColor.r *= Random.Range(0.0f, 1.0f);
-        myColor.g *= Random.Range(0.0f, 1.0f);
-        myColor.b *= Random.Range(0.0f, 1.0f);
-
+       
         for (int j = 0; j < transform.childCount; j++)
         {            
-            transform.GetChild(j).GetComponent<Renderer>().material.color = myColor;
+            transform.GetChild(j).GetComponent<Renderer>().material.color = spawnColor;
         }
         
     }

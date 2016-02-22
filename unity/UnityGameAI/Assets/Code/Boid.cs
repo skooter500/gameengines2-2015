@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Boid : MonoBehaviour {
     public Vector3 velocity;
@@ -24,12 +24,42 @@ public class Boid : MonoBehaviour {
     public bool pursueEnabled;
     public GameObject pursueTarget;
     Vector3 pursueTargetPos;
-    
-    public bool offsetPursueEnabled;
-    public GameObject offsetPursueLeader;
+
+    public bool offsetPursueEnabled = false;
+    public GameObject offsetPursueTarget = null;
     Vector3 offset;
     Vector3 offsetPursueTargetPos;
 
+    [HideInInspector]
+    public int current = 0;
+
+    public bool pathFollowEnabled = false;
+    public Path path = new Path();
+
+    public void TurnOffAll()
+    {
+        seekEnabled = arriveEnabled = fleeEnabled = pursueEnabled = offsetPursueEnabled = pathFollowEnabled = false;
+    }
+    
+    public Vector3 FollowPath()
+    {
+        float epsilon = 5.0f;
+        float dist = (transform.position - path.NextWaypoint()).magnitude;
+        if (dist < epsilon)
+        {
+            path.AdvanceToNext();
+        }
+        if ((!path.Looped) && path.IsLast)
+        {
+            return Arrive(path.NextWaypoint());
+        }
+        else
+        {
+            return Seek(path.NextWaypoint());
+        }
+    }
+    
+    
     public Vector3 Pursue(GameObject target)
     {
         Vector3 toTarget = target.transform.position - transform.position;
@@ -45,9 +75,9 @@ public class Boid : MonoBehaviour {
     {
         if (offsetPursueEnabled)
         {
-            offset = transform.position - offsetPursueLeader.transform.position;
+            offset = transform.position - offsetPursueTarget.transform.position;
             offset = Quaternion.Inverse(
-                   offsetPursueLeader.transform.rotation) * offset;
+                   offsetPursueTarget.transform.rotation) * offset;
         }
     }
 
@@ -116,6 +146,12 @@ public class Boid : MonoBehaviour {
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(transform.position, offsetPursueTargetPos);
         }
+
+        if (pathFollowEnabled)
+        {
+            path.DrawGizmos();
+        }
+
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + force);
     }
@@ -152,7 +188,12 @@ public class Boid : MonoBehaviour {
 
         if (offsetPursueEnabled)
         {
-            force += OffsetPursue(offsetPursueLeader, offset);
+            force += OffsetPursue(offsetPursueTarget, offset);
+        }
+
+        if (pathFollowEnabled)
+        {
+            force += FollowPath();
         }
 
         force = Vector3.ClampMagnitude(force, maxForce);

@@ -20,6 +20,7 @@ public class FoodSpawner : MonoBehaviour {
         while (true)
         {
             GameObject food = GameObject.Instantiate(foodPrefab);
+            food.transform.parent = transform;
             Vector3 pos = Random.insideUnitSphere;
             pos *= range;
             pos.y = transform.position.y;
