@@ -16,14 +16,37 @@
 * Twitter: [@skooter500](http://twitter.com/skooter500)
 * Slack: https://gameengines2015.slack.com
 
-# Assignment
+## Assignment
 - [Assignment](assignment.md)
+
+# Week 5
+- Finite state machines
+- [A discussion about how best to implement FSM's in Unity3D](http://forum.unity3d.com/threads/implementing-finite-state-machine-ai-c.287401/)
+- FSM Libraries for Unity3D		
+	- [http://www.hutonggames.com/]
+	- [https://github.com/dotnet-state-machine/stateless]
+	- [https://github.com/MhmmdAb/TinyStateMachine]
+
+## Lab
+- Have a read over the FSM lecture if you need to
+- Clone the repo and check out scene6
+- Have a look at the little fishies and see if you can figure out what their behaviours is. They all have the same behaviour. You might need to watch them for up to 5 minutes to see the full range.
+- *Without* looking at the code or any of the objects in the scene, see if you can figure out what the behaviour is and how it's all implemented.
+- Now go and check the code and see if you were correct!
+- I am not happy with the idle behaviour. See if you can come up with a more fish like one. Have a look on YouTube if you need inspiration.
+- See if you can make them fight and kill each other. Try and use states fof this.
+
+# Week 4
+- Pursue & offset pursue
+
+## Lab
+- Implement offset pursue and set up a fleet
 
 # Week 3
 - Crash course in all the steering behaviours
 - Arrive, flee, pursue and evade
 
-# Lab
+## Lab
 - Clone the repo and study the solution to last week and make sure you know how it works!
 - Create a new fish spawner that spawns red fish.
 - The red fish should start at a random position in the tank and *arrive* at a random position in the fish tank.
