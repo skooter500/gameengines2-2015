@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using BGE;
 using System.Collections.Generic;
 
 public class Boid : MonoBehaviour {
@@ -6,36 +7,37 @@ public class Boid : MonoBehaviour {
     public Vector3 acceleration;
     public Vector3 force;
     public float mass = 1.0f;
+    public bool applyBanking = true;
+    public float straighteningTendancy = 0.2f;
+    public float damping = 0.0f;
 
-    public float maxSpeed = 5.0f;
-    public float maxForce = 5.0f;
+    public float maxSpeed = 20.0f;
+    public float maxForce = 10.0f;
 
+    [Header("Seek")]
     public bool seekEnabled;
     public Vector3 seekTargetPosition;
 
+    [Header("Arrive")]
     public bool arriveEnabled;
     public Vector3 arriveTargetPosition;
     public float slowingDistance = 15;
 
+    [Header("Flee")]
     public bool fleeEnabled;
     public float fleeRange = 15.0f;
     public Vector3 fleeTargetPosition;
 
+    [Header("Pursue")]
     public bool pursueEnabled;
     public GameObject pursueTarget;
     Vector3 pursueTargetPos;
 
+    [Header("Offset Pursue")]
     public bool offsetPursueEnabled = false;
     public GameObject offsetPursueTarget = null;
     Vector3 offset;
     Vector3 offsetPursueTargetPos;
-
-    [Header("Wander")]
-    public bool wanderEnabled;
-    public float wanderRadius = 10.0f;
-    public float wanderJitter = 20.0f;
-    public float wanderDistance = 15.0f;
-    private Vector3 wanderTargetPos = Vector3.zero;
 
 
     [HideInInspector]
@@ -45,11 +47,35 @@ public class Boid : MonoBehaviour {
     public bool pathFollowEnabled = false;
     public Path path = new Path();
 
+    [Header("Wander")]
+    public bool wanderEnabled = false;
+    public float wanderRadius = 10.0f;
+    public float wanderJitter = 1.0f;
+    public float wanderDistance = 15.0f;
+    private Vector3 wanderTargetPos;
+
     public void TurnOffAll()
     {
         seekEnabled = arriveEnabled = fleeEnabled = pursueEnabled = offsetPursueEnabled = pathFollowEnabled = wanderEnabled = false;
     }
-    
+
+    public Vector3 Wander()
+    {
+        float jitterTimeSlice = wanderJitter * Time.deltaTime;
+
+        Vector3 toAdd = Random.insideUnitSphere * jitterTimeSlice;
+        wanderTargetPos += toAdd;
+        wanderTargetPos.Normalize();
+        wanderTargetPos *= wanderRadius;
+        
+        /*Quaternion jitter = Quaternion.AngleAxis(jitterTimeSlice, Random.insideUnitSphere);
+        wanderTargetPos = jitter * wanderTargetPos;
+        */
+        Vector3 localTarget = wanderTargetPos + Vector3.forward * wanderDistance;
+        Vector3 worldTarget = transform.TransformPoint(localTarget);        
+        return (worldTarget - transform.position);
+    }
+
     public Vector3 FollowPath()
     {
         float epsilon = 5.0f;
@@ -92,21 +118,6 @@ public class Boid : MonoBehaviour {
         wanderTargetPos = Random.insideUnitSphere * wanderRadius;
     }
 
-    public Vector3 Wander()
-    {
-        float jitterTimeSlice = wanderJitter * Time.deltaTime;
-
-        Vector3 toAdd = Random.insideUnitSphere * jitterTimeSlice;
-
-        wanderTargetPos += toAdd;
-        wanderTargetPos.Normalize();
-        wanderTargetPos *= wanderRadius;
-        //Vector3 localTarget = wanderTargetPos + (Vector3.forward * wanderDistance);
-        //Vector3 worldTarget = transform.TransformPoint(localTarget);
-        Vector3 worldTarget = transform.position + (transform.forward * wanderDistance) + wanderTargetPos;
-        
-        return (worldTarget - transform.position);
-    }
 
     public Vector3 OffsetPursue(GameObject leader, Vector3 offset)
     {
@@ -174,17 +185,19 @@ public class Boid : MonoBehaviour {
             Gizmos.DrawLine(transform.position, offsetPursueTargetPos);
         }
 
+        if (pathFollowEnabled)
+        {
+            path.DrawGizmos();
+        }
+
         if (wanderEnabled)
         {
             Gizmos.color = Color.blue;
-            Vector3 wanderCircleCenter = transform.TransformPoint((Vector3.forward * wanderDistance));
+            Vector3 wanderCircleCenter = transform.TransformPoint(Vector3.forward * wanderDistance);
             Gizmos.DrawWireSphere(wanderCircleCenter, wanderRadius);
-            Vector3 worldTarget = transform.TransformPoint(wanderTargetPos + (Vector3.forward * wanderDistance));
+            Gizmos.color = Color.green;
+            Vector3 worldTarget = transform.TransformPoint(wanderTargetPos + Vector3.forward * wanderDistance);
             Gizmos.DrawLine(transform.position, worldTarget);
-        }
-
-        if (pathFollowEnabled)
-        {
             path.DrawGizmos();
         }
 
@@ -238,6 +251,41 @@ public class Boid : MonoBehaviour {
         }
 
         force = Vector3.ClampMagnitude(force, maxForce);
+
+        Vector3 acceleration = force / mass;        
+        velocity += acceleration * Time.deltaTime;        
+        velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
+        if (velocity.magnitude > float.Epsilon)
+        {
+            transform.forward = velocity;
+        }
+
+        if (applyBanking)
+        {
+            float smoothRate = Utilities.Clip(9.0f * Time.deltaTime, 0.15f, 0.4f) / 2.0f;
+            Utilities.BlendIntoAccumulator(smoothRate, acceleration, ref acceleration);            
+            // the length of this global-upward-pointing vector controls the vehicle's
+            // tendency to right itself as it is rolled over from turning acceleration
+            Vector3 globalUp = new Vector3(0, straighteningTendancy, 0);
+            // acceleration points toward the center of local path curvature, the
+            // length determines how much the vehicle will roll while turning
+            Vector3 accelUp = acceleration * 0.05f;
+            // combined banking, sum of UP due to turning and global UP
+            Vector3 bankUp = accelUp + globalUp;
+            // blend bankUp into vehicle's UP basis vector
+            smoothRate = Time.deltaTime * 3.0f;
+            Vector3 tempUp = transform.up;
+            Utilities.BlendIntoAccumulator(smoothRate, bankUp, ref tempUp);
+
+            transform.forward.Normalize();
+            transform.LookAt(transform.position + transform.forward, tempUp);            
+        }
+
+        // Apply damping
+        velocity *= (1.0f - damping);
+
+        /*
+        force = Vector3.ClampMagnitude(force, maxForce);
         acceleration = force / mass;
         velocity += acceleration * Time.deltaTime;
 
@@ -246,7 +294,8 @@ public class Boid : MonoBehaviour {
         if (velocity.magnitude > float.Epsilon)
         {
             transform.forward = velocity;
-        }        
+        }     
+        */
     }
         
 }
