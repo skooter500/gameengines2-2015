@@ -30,15 +30,24 @@ public class Boid : MonoBehaviour {
     Vector3 offset;
     Vector3 offsetPursueTargetPos;
 
+    [Header("Wander")]
+    public bool wanderEnabled;
+    public float wanderRadius = 10.0f;
+    public float wanderJitter = 20.0f;
+    public float wanderDistance = 15.0f;
+    private Vector3 wanderTargetPos = Vector3.zero;
+
+
     [HideInInspector]
     public int current = 0;
 
+    [Header("Path Following")]
     public bool pathFollowEnabled = false;
     public Path path = new Path();
 
     public void TurnOffAll()
     {
-        seekEnabled = arriveEnabled = fleeEnabled = pursueEnabled = offsetPursueEnabled = pathFollowEnabled = false;
+        seekEnabled = arriveEnabled = fleeEnabled = pursueEnabled = offsetPursueEnabled = pathFollowEnabled = wanderEnabled = false;
     }
     
     public Vector3 FollowPath()
@@ -79,6 +88,24 @@ public class Boid : MonoBehaviour {
             offset = Quaternion.Inverse(
                    offsetPursueTarget.transform.rotation) * offset;
         }
+
+        wanderTargetPos = Random.insideUnitSphere * wanderRadius;
+    }
+
+    public Vector3 Wander()
+    {
+        float jitterTimeSlice = wanderJitter * Time.deltaTime;
+
+        Vector3 toAdd = Random.insideUnitSphere * jitterTimeSlice;
+
+        wanderTargetPos += toAdd;
+        wanderTargetPos.Normalize();
+        wanderTargetPos *= wanderRadius;
+        //Vector3 localTarget = wanderTargetPos + (Vector3.forward * wanderDistance);
+        //Vector3 worldTarget = transform.TransformPoint(localTarget);
+        Vector3 worldTarget = transform.position + (transform.forward * wanderDistance) + wanderTargetPos;
+        
+        return (worldTarget - transform.position);
     }
 
     public Vector3 OffsetPursue(GameObject leader, Vector3 offset)
@@ -147,6 +174,15 @@ public class Boid : MonoBehaviour {
             Gizmos.DrawLine(transform.position, offsetPursueTargetPos);
         }
 
+        if (wanderEnabled)
+        {
+            Gizmos.color = Color.blue;
+            Vector3 wanderCircleCenter = transform.TransformPoint((Vector3.forward * wanderDistance));
+            Gizmos.DrawWireSphere(wanderCircleCenter, wanderRadius);
+            Vector3 worldTarget = transform.TransformPoint(wanderTargetPos + (Vector3.forward * wanderDistance));
+            Gizmos.DrawLine(transform.position, worldTarget);
+        }
+
         if (pathFollowEnabled)
         {
             path.DrawGizmos();
@@ -194,6 +230,11 @@ public class Boid : MonoBehaviour {
         if (pathFollowEnabled)
         {
             force += FollowPath();
+        }
+
+        if (wanderEnabled)
+        {
+            force += Wander();
         }
 
         force = Vector3.ClampMagnitude(force, maxForce);
