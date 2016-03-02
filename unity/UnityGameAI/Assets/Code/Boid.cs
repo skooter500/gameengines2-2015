@@ -54,9 +54,64 @@ public class Boid : MonoBehaviour {
     public float wanderDistance = 15.0f;
     private Vector3 wanderTargetPos;
 
+    [Header("PlaneAvoidance")]
+    public bool planeAvoidanceEnabled;
+    public float feelerDistance = 20.0f;
+    private bool planeAvoidanceActive = false;
+    List<Vector3> planeAvoidanceFeelers = new List<Vector3>();
+    public List<Plane> planes = new List<Plane>();
+
+    public void MakeFeelers()
+    {
+        planeAvoidanceFeelers.Clear();
+        Vector3 newFeeler = Vector3.forward * feelerDistance;
+        newFeeler = transform.TransformPoint(newFeeler);
+        planeAvoidanceFeelers.Add(newFeeler);
+
+        newFeeler = Vector3.forward * feelerDistance;
+        newFeeler = Quaternion.AngleAxis(45, Vector3.up) * newFeeler;
+        newFeeler = transform.TransformPoint(newFeeler);
+        planeAvoidanceFeelers.Add(newFeeler);
+
+        newFeeler = Vector3.forward * feelerDistance;
+        newFeeler = Quaternion.AngleAxis(-45, Vector3.up) * newFeeler;
+        newFeeler = transform.TransformPoint(newFeeler);
+        planeAvoidanceFeelers.Add(newFeeler);
+
+        newFeeler = Vector3.forward * feelerDistance;
+        newFeeler = Quaternion.AngleAxis(45, Vector3.right) * newFeeler;
+        newFeeler = transform.TransformPoint(newFeeler);
+        planeAvoidanceFeelers.Add(newFeeler);
+
+        newFeeler = Vector3.forward * feelerDistance;
+        newFeeler = Quaternion.AngleAxis(-45, Vector3.right) * newFeeler;
+        newFeeler = transform.TransformPoint(newFeeler);
+        planeAvoidanceFeelers.Add(newFeeler);
+    }
+
+    public Vector3 PlaneAvoidance()
+    {
+        MakeFeelers();
+        planeAvoidanceActive = false;
+        Vector3 force = Vector3.zero;
+        foreach (Vector3 feeler in planeAvoidanceFeelers)
+        {
+            foreach (Plane plane in planes)
+            {
+                if (!plane.GetSide(feeler))
+                {
+                    planeAvoidanceActive = true;
+                    float distance = Mathf.Abs(plane.GetDistanceToPoint(feeler));
+                    force += plane.normal * distance;
+                }
+            }            
+        }        
+        return force;
+    }
+
     public void TurnOffAll()
     {
-        seekEnabled = arriveEnabled = fleeEnabled = pursueEnabled = offsetPursueEnabled = pathFollowEnabled = wanderEnabled = false;
+        seekEnabled = arriveEnabled = fleeEnabled = pursueEnabled = offsetPursueEnabled = pathFollowEnabled = wanderEnabled = planeAvoidanceEnabled = false;
     }
 
     public Vector3 Wander()
@@ -201,6 +256,15 @@ public class Boid : MonoBehaviour {
             path.DrawGizmos();
         }
 
+        if (planeAvoidanceEnabled && planeAvoidanceActive)
+        {
+            foreach (Vector3 feeler in planeAvoidanceFeelers)
+            {
+                Gizmos.color = Color.gray;
+                Gizmos.DrawLine(transform.position, feeler);
+            }
+        }
+        
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + force);
     }
@@ -250,6 +314,11 @@ public class Boid : MonoBehaviour {
             force += Wander();
         }
 
+        if (planeAvoidanceEnabled)
+        {
+            force += PlaneAvoidance();
+        }
+
         force = Vector3.ClampMagnitude(force, maxForce);
 
         Vector3 acceleration = force / mass;        
@@ -259,6 +328,8 @@ public class Boid : MonoBehaviour {
         {
             transform.forward = velocity;
         }
+
+        transform.position += velocity * Time.deltaTime;
 
         if (applyBanking)
         {
@@ -282,7 +353,7 @@ public class Boid : MonoBehaviour {
         }
 
         // Apply damping
-        velocity *= (1.0f - damping);
+        //velocity *= (1.0f - damping);
 
         /*
         force = Vector3.ClampMagnitude(force, maxForce);
