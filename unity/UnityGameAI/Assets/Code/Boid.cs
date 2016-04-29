@@ -260,6 +260,8 @@ public class Boid : MonoBehaviour {
             transform.forward = velocity;
         }
 
+        transform.position += velocity * Time.deltaTime;
+
         if (applyBanking)
         {
             float smoothRate = Utilities.Clip(9.0f * Time.deltaTime, 0.15f, 0.4f) / 2.0f;
@@ -282,7 +284,7 @@ public class Boid : MonoBehaviour {
         }
 
         // Apply damping
-        velocity *= (1.0f - damping);
+        velocity *= (1.0f - damping * Time.deltaTime);
 
         /*
         force = Vector3.ClampMagnitude(force, maxForce);
