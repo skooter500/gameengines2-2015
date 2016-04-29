@@ -10,7 +10,7 @@ public class FSM : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         SwitchState(new IdleState(this));
-        StartCoroutine("Consume");    
+        StartCoroutine("Consume");
 	}
 
     System.Collections.IEnumerator Consume()

@@ -84,13 +84,13 @@ public class FPSController : MonoBehaviour
         {
             Strafe(Time.deltaTime * speed);
         }
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.R))
         {
-            Roll(-Time.deltaTime * speed);
+            Fly(Time.deltaTime * speed);
         }
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.F))
         {
-            Roll(Time.deltaTime * speed);
+            Fly(- Time.deltaTime * speed);
         }
         //BoidManager.PrintVector("OVR Forward: ", ovrCamera.transform.forward);
 
