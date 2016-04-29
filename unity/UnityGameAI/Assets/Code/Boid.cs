@@ -320,7 +320,6 @@ public class Boid : MonoBehaviour {
         }
 
         force = Vector3.ClampMagnitude(force, maxForce);
-
         Vector3 acceleration = force / mass;        
         velocity += acceleration * Time.deltaTime;        
         velocity = Vector3.ClampMagnitude(velocity, maxSpeed);

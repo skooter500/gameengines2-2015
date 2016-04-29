@@ -9,11 +9,11 @@ public class PlaneAvoidanceController : MonoBehaviour {
         boid = GetComponent<Boid>();
         boid.seekEnabled = true;
         boid.planeAvoidanceEnabled = true;
-        boid.planes.Add(new Plane(new Vector3(0, 1, 0), 50));
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        boid.planes.Add(new Plane(new Vector3(0, 1, 0), 50));        
+    }
+
+    // Update is called once per frame
+    void Update () {
         if (Input.GetMouseButtonDown(0))
         {
             GameObject camera = (GameObject)GameObject.FindGameObjectWithTag("MainCamera");
