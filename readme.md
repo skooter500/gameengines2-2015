@@ -18,11 +18,12 @@
 
 ## Assignment
 - [Assignment](assignment.md)
+- [Assignment submission](https://docs.google.com/forms/d/1UCqdPEwhk3sFUedBJ12cTACrQpmvD3ws9Kg72uM2RL8/viewform)
 
 # Week 5
 - Finite state machines
 - [A discussion about how best to implement FSM's in Unity3D](http://forum.unity3d.com/threads/implementing-finite-state-machine-ai-c.287401/)
-- FSM Libraries for Unity3D		
+- FSM Libraries for Unity3D
 	- [http://www.hutonggames.com/]
 	- [https://github.com/dotnet-state-machine/stateless]
 	- [https://github.com/MhmmdAb/TinyStateMachine]
@@ -71,7 +72,7 @@ Create this virtual fish tank:
 You can start with yesterdays code. I only used ```Seek``` to make the fish move and I didn't modify the Boid class! You can use Colliders, tagging, rigid bodies, spawners, prefabs and co-routines and any other Unity magic you know. What's happening:
 
 - Fish should spawn at random positions inside the cube.
-- They should be coloured with a random shade of green. 
+- They should be coloured with a random shade of green.
 - They should swim back and forth. There should be some variation in the speed the fish swim at.
 - Every two seconds, food should drop into the tank.
 - If a fish comes in range of food, it should chase it until the food goes out of range, or it eats it.
@@ -83,28 +84,28 @@ You can start with yesterdays code. I only used ```Seek``` to make the fish move
 
 ##Lectures
 - Check out the first set of slides
-- Revision on trigonometry, vectors and quaternions 
+- Revision on trigonometry, vectors and quaternions
 
 ## Lab
 
-You will recognise this question as being a variation on Question 1 from your Christmas exam. Instead of using the spaceship model from the exam, start with a blank unity project. 
+You will recognise this question as being a variation on Question 1 from your Christmas exam. Instead of using the spaceship model from the exam, start with a blank unity project.
 
 - Create a new scene
 - Add a cube and set its initial position to be (0, 0, 5). Set the cube colour using a material.
 - Add a point light and set its position to be (0, 0, 0) and its distance to be 20
 - Change the camera position so that its initial position is (0, 20, 0) and rotate it so that it looks down on the scene. To do this, set its Rotation to be (90, 0, 0)
 - Now attach a script to the sphere and call it CircleFollowing. Open this in Visual Studio
-- What you need to do in this script is 
+- What you need to do in this script is
 	- Add fields for radius and the waypointCount
 	- Add a field to hold a list of wayponts
-	- Set appropriate default values for these  
+	- Set appropriate default values for these
 	- In the Start method, use trigonometry to calculate the waypoints
-	- Calculate waypoints positioned around the outside of a circle centred at (000) and with a radius of the radius field. The points should be on the X-Z plane. The cube's start position should be the zeroth waypoint. 
-	- Int update, the cube should seek the next waypoint. When its’ distance is < 1, it should advance to the subsequent waypoint. When it reaches the last waypoint, it should seek the zeroth waypoint again and so on… 
+	- Calculate waypoints positioned around the outside of a circle centred at (000) and with a radius of the radius field. The points should be on the X-Z plane. The cube's start position should be the zeroth waypoint.
+	- Int update, the cube should seek the next waypoint. When its’ distance is < 1, it should advance to the subsequent waypoint. When it reaches the last waypoint, it should seek the zeroth waypoint again and so on…
 - Draw appropriate gizmos
 
 Can you generate the waypoints using quaternions?
 
-Advanced! Read this tutorial on [using Co-routines in Unity](http://docs.unity3d.com/Manual/Coroutines.html). See if you can use a coroutine and a line renderer to have the the cube fire a lazer every 2 seconds 
+Advanced! Read this tutorial on [using Co-routines in Unity](http://docs.unity3d.com/Manual/Coroutines.html). See if you can use a coroutine and a line renderer to have the the cube fire a lazer every 2 seconds
 
 - [Solution to the lab](unity/SimplePathFollowing)
