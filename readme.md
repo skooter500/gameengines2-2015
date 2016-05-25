@@ -16,6 +16,23 @@
 * Twitter: [@skooter500](http://twitter.com/skooter500)
 * Slack: https://gameengines2015.slack.com
 
+## Assignment marks
+
+C12487072 70
+C10720209 64
+C12388971 10
+C11426432 67
+C12369056 57
+C12428088 76
+C12474932 67
+C11483622 66
+C10321321 31
+C12449618 63
+C12331591 70
+C12339291 63
+C12391946 25
+C12722625 82
+
 ## Assignment
 - [Assignment](assignment.md)
 - [Assignment submission](https://docs.google.com/forms/d/1UCqdPEwhk3sFUedBJ12cTACrQpmvD3ws9Kg72uM2RL8/viewform)
